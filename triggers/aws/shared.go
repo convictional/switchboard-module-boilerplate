@@ -20,14 +20,19 @@ func NewService(logger *zap.Logger) Service {
 }
 
 func (s *Service) Run(event models.TriggerEvent) {
+	s.logger.Info("Test Logger")
 	if event.Batch {
+		s.logger.Info("Running based on batch event")
 		s.ProcessBatchEvent(event)
+		return
 	}
+	s.logger.Info("Running based on single event")
 
 	// Load
 	if event.Product != nil {
 		// TODO - Get single?
 	}
+
 
 	s.ProcessSingleProduct(*event.Product, event)
 }
@@ -53,6 +58,8 @@ func (s *Service) ProcessSingleProduct(product models.Product, event models.Trig
 			s.logger.Error("failed to transform product", zap.Error(err))
 			return
 		}
+	} else {
+		s.logger.Info("Transform has not been set")
 	}
 
 	if env.DoLoad() {
@@ -60,5 +67,7 @@ func (s *Service) ProcessSingleProduct(product models.Product, event models.Trig
 		if err != nil {
 			s.logger.Error("failed to load product", zap.Error(err))
 		}
+	} else {
+		s.logger.Info("Load has not been set")
 	}
 }

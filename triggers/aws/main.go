@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	"go.uber.org/zap"
+	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -15,6 +16,9 @@ func main() {
 func HandleRequest(ctx context.Context, awsEvent AWSTriggerEvent) {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
+
+	fmt.Printf("AWS Events :: %+v", awsEvent)
+	logger.Debug(fmt.Sprintf("AWS Events :: %+v", awsEvent))
 
 	// Convert event to be platform-agnostic
 	event, err := awsEvent.ConvertToTriggerEvent()
