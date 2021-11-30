@@ -1,0 +1,6 @@
+package extract
+
+
+func GetProductFromSQS() {
+
+}
