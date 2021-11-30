@@ -15,3 +15,12 @@
 | `Example` | True | This is a demo |
 
 
+## Running
+
+### Local
+
+#### AWS
+
+```
+go run ./triggers/aws/...
+```
