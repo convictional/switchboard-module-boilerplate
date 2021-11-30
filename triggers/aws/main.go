@@ -2,60 +2,23 @@ package main
 
 import (
 	"context"
-	"switchboard-module-boilerplate/env"
-	"switchboard-module-boilerplate/extract"
-	"switchboard-module-boilerplate/load"
-	"switchboard-module-boilerplate/models"
-	"switchboard-module-boilerplate/transform"
+	"go.uber.org/zap"
 )
 
 // HandleRequest is the entry point for AWS Lambda
 // https://docs.aws.amazon.com/lambda/latest/dg/golang-handler.html
 func HandleRequest(ctx context.Context, awsEvent AWSTriggerEvent) {
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+
+	// Convert event to be platform-agnostic
 	event, err := awsEvent.ConvertToTriggerEvent()
 	if err != nil {
-		// TODO - Add logging
-		return
-	}
-	if event.Batch {
-		ProcessBatchEvent(event)
-	}
-
-	// Load
-	if event.Product != nil {
-		// TODO - Get single?
-	}
-
-	ProcessSingleProduct(*event.Product, event)
-}
-
-func ProcessBatchEvent(event models.TriggerEvent) {
-	products, err := extract.Multiple(event)
-	if err != nil {
-		// TODO - Add logging
+		logger.Error("Failed to convert trigger event", zap.Error(err))
 		return
 	}
 
-	// There are two optional options: transform or load
-	for _, product := range products {
-		ProcessSingleProduct(product, event)
-	}
+	service := NewService(logger) // TODO - Move shared drive
+	service.Run(event)
 }
 
-func ProcessSingleProduct(product models.Product, event models.TriggerEvent) {
-	var err error
-	if env.DoTransform() {
-		product, err = transform.Transform(product)
-		if err != nil {
-			// TODO - Add logging
-			return
-		}
-	}
-
-	if env.DoLoad() {
-		err = load.Single(product, event)
-		if err != nil {
-			// TODO - Add logging
-		}
-	}
-}
