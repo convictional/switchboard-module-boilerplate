@@ -3,7 +3,12 @@ package main
 import (
 	"context"
 	"go.uber.org/zap"
+	"github.com/aws/aws-lambda-go/lambda"
 )
+
+func main() {
+	lambda.Start(HandleRequest)
+}
 
 // HandleRequest is the entry point for AWS Lambda
 // https://docs.aws.amazon.com/lambda/latest/dg/golang-handler.html
