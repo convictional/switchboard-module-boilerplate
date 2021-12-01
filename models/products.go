@@ -7,6 +7,27 @@ type BuyerProductResponse struct {
 	Data  Product          `json:"data"`
 	Error []interface{} `json:"error"`
 }
+
+type BuyerProductsResponse struct {
+	Data  []Product          `json:"data"`
+	HasMore bool `json:"hasMore"`
+	Next string `json:"next"`
+	Error []interface{} `json:"error"`
+}
+
+type SellerProductResponse struct {
+	Data  Product          `json:"data"`
+	Error []interface{} `json:"error"`
+}
+
+type SellerProductsResponse struct {
+	Data  []Product          `json:"data"`
+	HasMore bool `json:"hasMore"`
+	Next string `json:"next"`
+	Error []interface{} `json:"error"`
+}
+
+
 type Options struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
