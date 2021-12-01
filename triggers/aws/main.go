@@ -4,9 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
-	"switchboard-module-boilerplate/load"
+	"go.uber.org/zap"
 	"switchboard-module-boilerplate/logging"
-	"switchboard-module-boilerplate/models"
 )
 
 func main() {
@@ -20,16 +19,14 @@ func HandleRequest(ctx context.Context, awsEvent AWSTriggerEvent) {
 
 	logger.Debug(fmt.Sprintf("AWS Events :: %+v", awsEvent))
 
-	load.PublishToSQS(models.Product{}, models.TriggerEvent{})
-
 	// Convert event to be platform-agnostic
-	//event, err := awsEvent.ConvertToTriggerEvent()
-	//if err != nil {
-	//	logger.Error("Failed to convert trigger event", zap.Error(err))
-	//	return
-	//}
-	//
-	//service := NewService(logger) // TODO - Move shared drive
-	//service.Run(event)
+	event, err := awsEvent.ConvertToTriggerEvent()
+	if err != nil {
+		logger.Error("Failed to convert trigger event", zap.Error(err))
+		return
+	}
+
+	service := NewService(logger) // TODO - Move shared drive
+	service.Run(event)
 }
 
