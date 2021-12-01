@@ -17,3 +17,4 @@ func DoLoad() bool {
 func Debug() bool {
 	return os.Getenv("DEBUG") == "true"
 }
+
