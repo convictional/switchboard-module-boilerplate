@@ -1,0 +1,20 @@
+{
+  "Records": [
+    {
+      "messageId": "19dd0b57-b21e-4ac1-bd88-01bbb068cb78",
+      "receiptHandle": "MessageReceiptHandle",
+      "body": "{\"id\":\"5aa180d29ad9340010459936\",\"companyId\":\"5ede5c2d228b3c00016443a4\",\"title\":\"Test Product - Wholesaler\",\"brand\":\"Vendor\",\"description\":\"Description!\",\"sellerReference\":\"366034747431\",\"variants\":[{\"id\":\"5deae112d30a4f00191d758f\",\"sku\":\"134209871234\",\"title\":\"Default Title\",\"inventoryAmount\":16,\"retailPrice\":107,\"retailCurrency\":\"\",\"basePrice\":86,\"baseCurrency\":\"USD\",\"barcode\":\"134209871234\",\"barcodeType\":\"\",\"options\":[{\"name\":\"Title\",\"value\":\"Default Title\"}],\"skipCount\":false,\"weight\":0.1,\"weightUnits\":\"kg\",\"dimensions\":{\"length\":0,\"width\":0,\"height\":0,\"units\":\"\"},\"attributes\":{}}],\"tags\":[\"Dropshipped, Tag\",\"Dropshipped\",\"Tag\"],\"images\":[{\"id\":\"5deae112d30a4f00191d758e\",\"source\":\"https://cdn.shopify.com/s/files/1/2525/0350/products/box_137ce01f-a55e-4296-8b9d-df4ffbbf0f4a.png?v=1522874185\"}],\"optionNames\":[\"Title\"],\"googleProductCategory\":{\"name\":\"\",\"code\":0},\"attributes\":{},\"created\":\"2018-03-08T18:28:34.566Z\",\"updated\":\"2021-11-01T21:13:38.148Z\"}",
+      "attributes": {
+        "ApproximateReceiveCount": "1",
+        "SentTimestamp": "1523232000000",
+        "SenderId": "123456789012",
+        "ApproximateFirstReceiveTimestamp": "1523232000001"
+      },
+      "messageAttributes": {},
+      "md5OfBody": "{{{md5_of_body}}}",
+      "eventSource": "aws:sqs",
+      "eventSourceARN": "arn:aws:sqs:us-east-1:123456789012:MyQueue",
+      "awsRegion": "us-east-1"
+    }
+  ]
+}
