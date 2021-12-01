@@ -1,4 +1,4 @@
-package pubSub
+package main
 
 import (
 	"context"
@@ -37,4 +37,6 @@ func triggerPubSub(ctx context.Context, gcpPubSub GCPRecord) error {
 
 	service := NewService(logger) // TODO - Move shared drive
 	service.Run(event)
+
+	return err
 }
