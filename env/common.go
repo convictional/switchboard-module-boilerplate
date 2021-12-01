@@ -13,3 +13,7 @@ func DoTransform() bool {
 func DoLoad() bool {
 	return os.Getenv("LOAD") == "true"
 }
+
+func Debug() bool {
+	return os.Getenv("DEBUG") == "true"
+}
