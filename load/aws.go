@@ -1,7 +1,6 @@
 package load
 
 import (
-	"encoding/json"
 	"fmt"
 	"go.uber.org/zap"
 	"switchboard-module-boilerplate/env"
@@ -15,15 +14,8 @@ import (
 
 // PublishToSQS :: Sends a message to a SQS.
 // https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/go/sqs/SendMessage/SendMessage.go
-func PublishToSQS(product models.Product, event models.TriggerEvent) error {
+func PublishToSQS(productAsBytes []byte, event models.TriggerEvent) error {
 	logger := logging.GetLogger()
-
-	// Convert struct to JSON
-	productAsBytes, err := json.Marshal(product)
-	if err != nil {
-		logger.Error("failed to convert product to bytes", zap.Error(err))
-		return err
-	}
 
 	// Setup AWS Session
 	awsSession, err := session.NewSession(&aws.Config{
