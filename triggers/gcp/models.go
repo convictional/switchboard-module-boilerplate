@@ -8,7 +8,7 @@ import (
 
 type GCPRecord struct {
 	MessageID   string `json:"messageId"`
-	Data        string `json:"data"`
+	Data        []byte `json:"data"`
 	Attributes  string `json:"attributes"`
 	OrderingKey string `json:"orderingKey"`
 }
@@ -16,7 +16,7 @@ type GCPRecord struct {
 func (b *GCPRecord) ConvertToTriggerEvent() (models.TriggerEvent, error) {
 
 	var product models.Product
-	err := json.Unmarshal([]byte(b.Data), &product)
+	err := json.Unmarshal(b.Data, &product)
 	if err != nil {
 		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into product :: %s", err.Error())
 	}
