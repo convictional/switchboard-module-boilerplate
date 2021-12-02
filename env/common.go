@@ -18,3 +18,10 @@ func Debug() bool {
 	return os.Getenv("DEBUG") == "true"
 }
 
+func ExtractMethod() string {
+	return os.Getenv("EXTRACT_METHOD")
+}
+
+func LoadMethod() string {
+	return os.Getenv("LOAD_METHOD")
+}

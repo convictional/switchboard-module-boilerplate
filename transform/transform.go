@@ -1,12 +1,14 @@
 package transform
 
 import (
-	"strings"
 	"convictional.com/switchboard/models"
+	"strings"
 )
 
-func Transform(product models.Product) (models.Product, error) {
+// Transform returns processed flagged, the updated model, and error.
+// Products that have already been processed will be returned as false.
+func Transform(product models.Product) (bool, models.Product, error) {
 	// Insert your custom code!
 	product.Title = strings.ToUpper(product.Title) // TODO - For demo
-	return product, nil
+	return true, product, nil
 }
