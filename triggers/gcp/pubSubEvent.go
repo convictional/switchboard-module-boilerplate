@@ -1,4 +1,4 @@
-package main
+package gcp
 
 import (
 	"context"
@@ -6,13 +6,13 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
-	"switchboard-module-boilerplate/env"
-	"switchboard-module-boilerplate/triggers/shared"
+	"convictional.com/switchboard/env"
+	"convictional.com/switchboard/triggers/shared"
 )
 
+// TriggerPubSub consumes a Pub/Sub message.
 // https://cloud.google.com/pubsub/docs/reference/rest/v1/PubsubMessage
-// triggerPubSub consumes a Pub/Sub message.
-func triggerPubSub(ctx context.Context, gcpPubSub GCPPubSubRecord) error {
+func TriggerPubSub(ctx context.Context, gcpPubSub GCPPubSubRecord) error {
 	config := zap.NewProductionConfig()
 	config.OutputPaths = []string{"stdout"}
 	if env.Debug() {

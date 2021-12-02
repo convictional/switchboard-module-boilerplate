@@ -2,11 +2,11 @@ package shared
 
 import (
 	"go.uber.org/zap"
-	"switchboard-module-boilerplate/env"
-	"switchboard-module-boilerplate/extract"
-	"switchboard-module-boilerplate/load"
-	"switchboard-module-boilerplate/models"
-	"switchboard-module-boilerplate/transform"
+	"convictional.com/switchboard/env"
+	"convictional.com/switchboard/extract"
+	"convictional.com/switchboard/load"
+	"convictional.com/switchboard/models"
+	"convictional.com/switchboard/transform"
 )
 
 type Service struct {

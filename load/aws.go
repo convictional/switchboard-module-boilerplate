@@ -3,9 +3,9 @@ package load
 import (
 	"fmt"
 	"go.uber.org/zap"
-	"switchboard-module-boilerplate/env"
-	"switchboard-module-boilerplate/logging"
-	"switchboard-module-boilerplate/models"
+	"convictional.com/switchboard/env"
+	"convictional.com/switchboard/logging"
+	"convictional.com/switchboard/models"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"

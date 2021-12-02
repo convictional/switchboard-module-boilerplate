@@ -4,7 +4,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
-	"switchboard-module-boilerplate/env"
+	"convictional.com/switchboard/env"
 )
 
 func GetLogger() *zap.Logger {

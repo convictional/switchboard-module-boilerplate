@@ -1,10 +1,10 @@
-package main
+package gcp
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"switchboard-module-boilerplate/models"
+	"convictional.com/switchboard/models"
 )
 
 type GCPPubSubRecord struct {

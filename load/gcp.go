@@ -5,9 +5,9 @@ import (
 	"context"
 	"fmt"
 	"go.uber.org/zap"
-	"switchboard-module-boilerplate/env"
-	"switchboard-module-boilerplate/logging"
-	"switchboard-module-boilerplate/models"
+	"convictional.com/switchboard/env"
+	"convictional.com/switchboard/logging"
+	"convictional.com/switchboard/models"
 )
 
 // PublishToPubSub :: Sends a message to a GCP Pub/Sub.

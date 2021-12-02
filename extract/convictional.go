@@ -8,10 +8,10 @@ import (
 	"golang.org/x/time/rate"
 	"io/ioutil"
 	"net/http"
-	"switchboard-module-boilerplate/env"
-	"switchboard-module-boilerplate/logging"
-	"switchboard-module-boilerplate/models"
-	"switchboard-module-boilerplate/outbound_http"
+	"convictional.com/switchboard/env"
+	"convictional.com/switchboard/logging"
+	"convictional.com/switchboard/models"
+	"convictional.com/switchboard/outbound_http"
 	"time"
 )
 
