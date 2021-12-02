@@ -30,7 +30,7 @@ func httpTriggerEvent(w http.ResponseWriter, r HTTPWebRequest) {
 	logger.Debug(fmt.Sprintf("GCP Events :: %+v", r))
 
 	// Convert event to be platform-agnostic
-	event, err := r.ConvertHTTPToTriggerEvent(r)
+	event, err := r.ConvertHTTPToTriggerEvent()
 	if err != nil {
 		logger.Error("Failed to convert trigger event", zap.Error(err))
 		return
