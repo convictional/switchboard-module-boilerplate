@@ -27,7 +27,7 @@ func httpTriggerEvent(w http.ResponseWriter, r HTTPWebRequest) {
 		return
 	}
 
-	logger.Debug(fmt.Sprintf("AWS Events :: %+v", r))
+	logger.Debug(fmt.Sprintf("GCP Events :: %+v", r))
 
 	// Convert event to be platform-agnostic
 	event, err := r.ConvertHTTPToTriggerEvent(r)

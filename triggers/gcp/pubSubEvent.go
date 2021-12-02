@@ -27,7 +27,7 @@ func triggerPubSub(ctx context.Context, gcpPubSub GCPPubSubRecord) error {
 		return err
 	}
 
-	logger.Debug(fmt.Sprintf("AWS Events :: %+v", gcpPubSub))
+	logger.Debug(fmt.Sprintf("GCP Events :: %+v", gcpPubSub))
 
 	// Convert event to be platform-agnostic
 	event, err := gcpPubSub.ConvertPSToTriggerEvent()
