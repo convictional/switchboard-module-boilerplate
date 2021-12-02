@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"switchboard-module-boilerplate/env"
+	"switchboard-module-boilerplate/triggers/shared"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -35,7 +36,7 @@ func triggerPubSub(ctx context.Context, gcpPubSub GCPPubSubRecord) error {
 		return err
 	}
 
-	service := NewService(logger) // TODO - Move shared drive
+	service := shared.NewService(logger) // TODO - Move shared drive
 	service.Run(event)
 
 	return err

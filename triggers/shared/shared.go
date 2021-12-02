@@ -1,15 +1,12 @@
 package main
 
-// This is the same that is copied from the /aws folder, for now
-
 import (
+	"go.uber.org/zap"
 	"switchboard-module-boilerplate/env"
 	"switchboard-module-boilerplate/extract"
 	"switchboard-module-boilerplate/load"
 	"switchboard-module-boilerplate/models"
 	"switchboard-module-boilerplate/transform"
-
-	"go.uber.org/zap"
 )
 
 type Service struct {
@@ -35,6 +32,7 @@ func (s *Service) Run(event models.TriggerEvent) {
 	if event.Product != nil {
 		// TODO - Get single?
 	}
+
 
 	s.ProcessSingleProduct(*event.Product, event)
 }

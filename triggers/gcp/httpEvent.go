@@ -5,13 +5,14 @@ import (
 	"log"
 	"net/http"
 	"switchboard-module-boilerplate/env"
+	"switchboard-module-boilerplate/triggers/shared"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
 // httpTriggerEvent is an HTTP Cloud Function with a request parameter.
-func httpTriggerEvent(w http.ResponseWriter, r *http.Request) {
+func httpTriggerEvent(w http.ResponseWriter, r HTTPWebRequest) {
 
 	config := zap.NewProductionConfig()
 	config.OutputPaths = []string{"stdout"}
@@ -29,13 +30,13 @@ func httpTriggerEvent(w http.ResponseWriter, r *http.Request) {
 	logger.Debug(fmt.Sprintf("AWS Events :: %+v", r))
 
 	// Convert event to be platform-agnostic
-	event, err := r.ConvertHTTPToTriggerEvent()
+	event, err := r.ConvertHTTPToTriggerEvent(r)
 	if err != nil {
 		logger.Error("Failed to convert trigger event", zap.Error(err))
 		return
 	}
 
-	service := NewService(logger) // TODO - Move shared drive
+	service := shared.NewService(logger) // TODO - Move shared drive
 	service.Run(event)
 
 	return

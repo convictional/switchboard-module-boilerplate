@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
+	"io"
 	"switchboard-module-boilerplate/models"
 )
 
@@ -23,6 +23,10 @@ type GCPWebhookEvent struct {
 	Data            models.Product `json:"data"`
 }
 
+type HTTPWebRequest struct {
+	Body io.ReadCloser
+}
+
 func (b *GCPPubSubRecord) ConvertPSToTriggerEvent() (models.TriggerEvent, error) {
 	var product models.Product
 
@@ -38,7 +42,7 @@ func (b *GCPPubSubRecord) ConvertPSToTriggerEvent() (models.TriggerEvent, error)
 	}, nil
 }
 
-func ConvertHTTPToTriggerEvent(r *http.Request) (models.TriggerEvent, error) {
+func (r *HTTPWebRequest) ConvertHTTPToTriggerEvent() (models.TriggerEvent, error) {
 	var body GCPWebhookEvent
 
 	buf := new(bytes.Buffer)
