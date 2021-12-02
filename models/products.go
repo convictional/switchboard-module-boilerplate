@@ -28,58 +28,83 @@ type SellerProductsResponse struct {
 }
 
 
-type Options struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
-}
 type Dimensions struct {
 	Length int    `json:"length"`
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
 	Units  string `json:"units"`
 }
-type Attributes struct {
+type BuyerVariant struct {
+
 }
-type Variants struct {
-	ID              string     `json:"id"`
-	Sku             string     `json:"sku"`
-	Title           string     `json:"title"`
+type Images struct {
+	ID         string      `json:"_id"`
+	Src        string      `json:"src"`
+	Position   int         `json:"position"`
+	VariantIds []string `json:"variantIds"`
+}
+
+type Variant struct {
+	ID                string      `json:"_id"`
+	Title             string      `json:"title"`
+	RetailPrice       int         `json:"retailPrice"`
+	InventoryQuantity int         `json:"inventory_quantity"`
+	SkipCount         bool        `json:"skipCount"`
+	Weight            int         `json:"weight"`
+	WeightUnits       string      `json:"weightUnits"`
+	Dimensions        Dimensions  `json:"dimensions"`
+	Sku               string      `json:"sku"`
+	Barcode           string      `json:"barcode"`
+	BarcodeType       string      `json:"barcodeType"`
+	Code              string      `json:"code"`
+	Attributes        interface{} `json:"attributes"`
+	Metafields        interface{} `json:"Metafields"`
+	VariantID                int64       `json:"id"`
+	Option1           string      `json:"option1"`
+	Option2           string      `json:"option2"`
+	Option3           string      `json:"option3"`
+
 	InventoryAmount int        `json:"inventoryAmount"`
-	RetailPrice     int        `json:"retailPrice"`
 	RetailCurrency  string     `json:"retailCurrency"`
 	BasePrice       int        `json:"basePrice"`
 	BaseCurrency    string     `json:"baseCurrency"`
-	Barcode         string     `json:"barcode"`
-	BarcodeType     string     `json:"barcodeType"`
 	Options         []Options  `json:"options"`
-	SkipCount       bool       `json:"skipCount"`
-	Weight          float64    `json:"weight"`
-	WeightUnits     string     `json:"weightUnits"`
-	Dimensions      Dimensions `json:"dimensions"`
-	Attributes      Attributes `json:"attributes"`
 }
-type Images struct {
-	ID     string `json:"id"`
-	Source string `json:"source"`
+type Options struct {
+	ID       string `json:"_id"`
+	Name     string `json:"name"`
+	Position int    `json:"position"`
+	Type     string `json:"type"`
 }
+
 type GoogleProductCategory struct {
 	Name string `json:"name"`
 	Code int    `json:"code"`
 }
 
+
+
 type Product struct {
-	ID                    string                `json:"id"`
-	CompanyID             string                `json:"companyId"`
+	ID                    string                `json:"_id"`
+	Code                  string                `json:"code"`
+	Active                bool                  `json:"active"`
+	BodyHTML              string                `json:"bodyHtml"`
+	Images                []Images              `json:"images"`
+	Tags                  []string              `json:"tags"`
 	Title                 string                `json:"title"`
+	Vendor                string                `json:"vendor"`
+	Variants              []Variant            `json:"variants"`
+	Options               []Options             `json:"options"`
+	GoogleProductCategory GoogleProductCategory `json:"googleProductCategory"`
+	DelistedUpdated       time.Time             `json:"delistedUpdated"`
+	Created               time.Time             `json:"created"`
+	Updated               time.Time             `json:"updated"`
+	CompanyObjectID       string                `json:"companyObjectId"`
+	Attributes            map[string]interface{}           `json:"attributes"`
+	CompanyID             string                `json:"companyId"`
 	Brand                 string                `json:"brand"`
 	Description           string                `json:"description"`
 	SellerReference       string                `json:"sellerReference"`
-	Variants              []Variants            `json:"variants"`
-	Tags                  []string              `json:"tags"`
-	Images                []Images              `json:"images"`
 	OptionNames           []string              `json:"optionNames"`
-	GoogleProductCategory GoogleProductCategory `json:"googleProductCategory"`
-	Attributes            Attributes            `json:"attributes"`
-	Created               time.Time             `json:"created"`
-	Updated               time.Time             `json:"updated"`
 }
+

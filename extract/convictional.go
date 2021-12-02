@@ -1,6 +1,10 @@
 package extract
 
 import (
+	"convictional.com/switchboard/env"
+	"convictional.com/switchboard/logging"
+	"convictional.com/switchboard/models"
+	"convictional.com/switchboard/outbound_http"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -8,10 +12,6 @@ import (
 	"golang.org/x/time/rate"
 	"io/ioutil"
 	"net/http"
-	"convictional.com/switchboard/env"
-	"convictional.com/switchboard/logging"
-	"convictional.com/switchboard/models"
-	"convictional.com/switchboard/outbound_http"
 	"time"
 )
 
@@ -24,11 +24,14 @@ func GetProductsFromAPI(event models.TriggerEvent) ([]models.Product, error) {
 	page := 1
 	results := []models.Product{}
 	for hasMore {
-		reqURL := fmt.Sprintf("https://api.convictional.com/products?page=%d&limit=25", page)
+		reqURL := fmt.Sprintf("%s/products?page=%d&limit=25", env.ConvictionalAPIURL(), page)
 		if env.IsBuyer() {
-			reqURL = fmt.Sprintf("https://api.convictional.com/buyer/products?page=%d&limit=25", page)
+			reqURL = fmt.Sprintf("%s/buyer/products?page=%d&limit=25", env.ConvictionalAPIURL(), page)
 		}
+		logger.Debug(fmt.Sprintf("Calling [%s]", reqURL))
 		req, _ := http.NewRequest("GET", reqURL, nil)
+		req.Header.Set("Authorization", env.ConvictionalAPIKey())
+		req.Header.Set("Accept", "application/json")
 		resp, err := c.Do(req)
 		if err != nil {
 			logger.Error("failed to make an HTTP call", zap.Error(err))
@@ -63,17 +66,17 @@ func GetProductsFromAPI(event models.TriggerEvent) ([]models.Product, error) {
 			}
 			results = append(results, productsResponse.Data...)
 		} else {
-			var productsResponse models.SellerProductsResponse
+			var productsResponse []models.Product
 			err = json.Unmarshal(body, &productsResponse)
 			if err != nil {
 				logger.Error("failed to unmarshal product response", zap.Int("statusCode", resp.StatusCode))
 				return []models.Product{}, err
 			}
 
-			if productsResponse.HasMore {
+			if len(productsResponse) < 25 {
 				hasMore = false
 			}
-			results = append(results, productsResponse.Data...)
+			results = append(results, productsResponse...)
 		}
 	}
 
@@ -87,9 +90,9 @@ func GetProductFromAPI(productID string) (models.Product, error) {
 	rl := rate.NewLimiter(rate.Every(1*time.Second), 5) // 5 request every 1 seconds
 	c := outbound_http.NewClient(rl)
 
-	reqURL := fmt.Sprintf("https://api.convictional.com/products/%s", productID)
+	reqURL := fmt.Sprintf("%s/products/%s", env.ConvictionalAPIURL(), productID)
 	if env.IsBuyer() {
-		reqURL = fmt.Sprintf("https://api.convictional.com/buyer/products/%s", productID)
+		reqURL = fmt.Sprintf("%s/buyer/products/%s", env.ConvictionalAPIURL(), productID)
 	}
 	req, _ := http.NewRequest("GET", reqURL, nil)
 	resp, err := c.Do(req)

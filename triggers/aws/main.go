@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
+	"convictional.com/switchboard/logging"
+	"convictional.com/switchboard/triggers"
 	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
 	"go.uber.org/zap"
-	"convictional.com/switchboard/logging"
 )
 
 func main() {
@@ -26,7 +27,7 @@ func HandleRequest(ctx context.Context, awsEvent AWSTriggerEvent) {
 		return
 	}
 
-	service := NewService(logger) // TODO - Move shared drive
+	service := triggers.NewService(logger) // TODO - Move shared drive
 	service.Run(event)
 }
 

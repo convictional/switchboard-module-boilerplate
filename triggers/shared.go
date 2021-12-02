@@ -1,12 +1,13 @@
-package main
+package triggers
 
 import (
-	"go.uber.org/zap"
 	"convictional.com/switchboard/env"
 	"convictional.com/switchboard/extract"
 	"convictional.com/switchboard/load"
 	"convictional.com/switchboard/models"
 	"convictional.com/switchboard/transform"
+	"fmt"
+	"go.uber.org/zap"
 )
 
 type Service struct {
@@ -40,7 +41,7 @@ func (s *Service) Run(event models.TriggerEvent) {
 func (s *Service) ProcessBatchEvent(event models.TriggerEvent) {
 	products, err := extract.Multiple(event)
 	if err != nil {
-		// TODO - Add logging
+		s.logger.Error("failed to get products from extract layer", zap.Error(err))
 		return
 	}
 
@@ -52,10 +53,13 @@ func (s *Service) ProcessBatchEvent(event models.TriggerEvent) {
 
 func (s *Service) ProcessSingleProduct(product models.Product, event models.TriggerEvent) {
 	var err error
+	var processed bool
+	var updatedProduct models.Product
 	if env.DoTransform() {
-		product, err = transform.Transform(product)
-		if err != nil {
-			s.logger.Error("failed to transform product", zap.Error(err))
+		s.logger.Debug(fmt.Sprintf("Tranforming [%s]", product.ID))
+		processed, updatedProduct, err = transform.Transform(product)
+		if !processed {
+			s.logger.Info(fmt.Sprintf("product [%s] has already been processed", product.ID))
 			return
 		}
 	} else {
@@ -63,7 +67,8 @@ func (s *Service) ProcessSingleProduct(product models.Product, event models.Trig
 	}
 
 	if env.DoLoad() {
-		err = load.Single(product, event)
+		s.logger.Debug(fmt.Sprintf("Loading [%s]", product.ID))
+		err = load.Single(product, updatedProduct, event)
 		if err != nil {
 			s.logger.Error("failed to load product", zap.Error(err))
 		}
