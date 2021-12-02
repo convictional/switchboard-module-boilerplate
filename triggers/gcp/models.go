@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -37,13 +36,15 @@ func (b *GCPPubSubRecord) ConvertPSToTriggerEvent() (models.TriggerEvent, error)
 func (r *HTTPWebRequest) ConvertHTTPToTriggerEvent() (models.TriggerEvent, error) {
 	var body models.ConvictionalWebhookEvent
 
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(r.Body)
-	s := buf.String()
-
-	err := json.Unmarshal([]byte(s), &body)
-
+	defer r.Body.Close()
+	s, err := io.ReadAll(r.Body)
 	if err != nil {
+		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into a byte array :: %s", err.Error())
+	}
+
+	err_json := json.Unmarshal([]byte(s), &body)
+
+	if err_json != nil {
 		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into a webhook event :: %s", err.Error())
 	}
 
