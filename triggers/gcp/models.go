@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 
 	"convictional.com/switchboard/models"
 )
@@ -34,7 +35,7 @@ func (b *GCPPubSubRecord) ConvertPSToTriggerEvent() (models.TriggerEvent, error)
 	}, nil
 }
 
-func (r *HTTPWebRequest) ConvertHTTPToTriggerEvent() (models.TriggerEvent, error) {
+func ConvertHTTPToTriggerEvent(r *http.Request) (models.TriggerEvent, error) {
 	var body models.ConvictionalWebhookEvent
 
 	defer r.Body.Close()
