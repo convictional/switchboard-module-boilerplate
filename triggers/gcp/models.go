@@ -24,8 +24,8 @@ type GCPWebhookEvent struct {
 }
 
 func (b *GCPPubSubRecord) ConvertPSToTriggerEvent() (models.TriggerEvent, error) {
-
 	var product models.Product
+
 	err := json.Unmarshal(b.Data, &product)
 	if err != nil {
 		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into product :: %s", err.Error())
@@ -38,7 +38,7 @@ func (b *GCPPubSubRecord) ConvertPSToTriggerEvent() (models.TriggerEvent, error)
 	}, nil
 }
 
-func (r *http.Request) ConvertHTTPToTriggerEvent() (models.TriggerEvent, error) {
+func ConvertHTTPToTriggerEvent(r *http.Request) (models.TriggerEvent, error) {
 	var body GCPWebhookEvent
 
 	buf := new(bytes.Buffer)
@@ -51,11 +51,9 @@ func (r *http.Request) ConvertHTTPToTriggerEvent() (models.TriggerEvent, error) 
 		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into a webhook event :: %s", err.Error())
 	}
 
-	var product = &body.Data
-
 	return models.TriggerEvent{
 		ID:      body.Id,
 		Batch:   false,
-		Product: product,
+		Product: &body.Data,
 	}, nil
 }
