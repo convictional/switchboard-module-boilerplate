@@ -15,14 +15,6 @@ type GCPPubSubRecord struct {
 	OrderingKey string `json:"orderingKey"`
 }
 
-type GCPWebhookEvent struct {
-	Id              string         `json:"_id"`
-	Type            string         `json:"type"`
-	Created         string         `json:"created"`
-	CompanyObjectId string         `json:"companyObjectId`
-	Data            models.Product `json:"data"`
-}
-
 type HTTPWebRequest struct {
 	Body io.ReadCloser
 }
@@ -43,7 +35,7 @@ func (b *GCPPubSubRecord) ConvertPSToTriggerEvent() (models.TriggerEvent, error)
 }
 
 func (r *HTTPWebRequest) ConvertHTTPToTriggerEvent() (models.TriggerEvent, error) {
-	var body GCPWebhookEvent
+	var body models.ConvictionalWebhookEvent
 
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(r.Body)
