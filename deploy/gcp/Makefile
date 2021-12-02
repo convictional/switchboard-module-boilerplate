@@ -3,12 +3,10 @@
 .PHONY: deploy-gcp-pubsub
 
 deploy-gcp-pubsub:
-	gcloud --project switchboard-demo functions deploy triggerPubSub \
-	--trigger-topic getProduct --runtime go116
+	./scripts/deploy-gcp-pubsub.sh
 
 deploy-gcp-http:
-	gcloud --project switchboard-demo functions deploy httpTriggerEvent \
-	--trigger-http --security-level=secure-optional
+	./scripts/deploy-gcp-http.sh
 
 .PHONY: create-gcp-pubsub
 
