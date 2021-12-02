@@ -2,7 +2,7 @@ package load
 
 import (
 	"fmt"
-	"switchboard-module-boilerplate/models"
+	"convictional.com/switchboard/models"
 )
 
 func Single(product models.Product, event models.TriggerEvent) error {

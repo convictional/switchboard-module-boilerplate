@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
 	"go.uber.org/zap"
-	"switchboard-module-boilerplate/logging"
+	"convictional.com/switchboard/logging"
 )
 
 func main() {

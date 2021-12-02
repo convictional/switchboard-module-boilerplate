@@ -1,6 +1,6 @@
 package extract
 
-import "switchboard-module-boilerplate/models"
+import "convictional.com/switchboard/models"
 
 func Single(event models.TriggerEvent) (models.Product, error) {
 	return models.Product{}, nil

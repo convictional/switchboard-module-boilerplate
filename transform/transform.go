@@ -2,7 +2,7 @@ package transform
 
 import (
 	"strings"
-	"switchboard-module-boilerplate/models"
+	"convictional.com/switchboard/models"
 )
 
 func Transform(product models.Product) (models.Product, error) {

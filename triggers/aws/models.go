@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"switchboard-module-boilerplate/models"
+	"convictional.com/switchboard/models"
 )
 
 const (

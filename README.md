@@ -34,3 +34,23 @@
 ```
 go run ./triggers/aws/...
 ```
+
+## Deploying/Packaging
+
+## AWS
+Package SQS Trigger
+```
+make package-aws-sqs
+```
+
+## GCP
+
+Deploy Pub/Sub Trigger
+```
+make deploy-gcp-pubsub 
+```
+
+Deploy HTTP Trigger
+```
+make deploy-gcp-http
+```
