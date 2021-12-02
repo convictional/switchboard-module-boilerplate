@@ -1,10 +1,12 @@
-package gcp
+package gcp_trigger
 
 import (
 	"fmt"
 	"log"
 	"net/http"
+
 	"convictional.com/switchboard/env"
+	"convictional.com/switchboard/triggers/gcp"
 	"convictional.com/switchboard/triggers/shared"
 
 	"go.uber.org/zap"
@@ -12,7 +14,7 @@ import (
 )
 
 // httpTriggerEvent is an HTTP Cloud Function with a request parameter.
-func httpTriggerEvent(w http.ResponseWriter, r HTTPWebRequest) {
+func HttpTriggerEvent(w http.ResponseWriter, r gcp.HTTPWebRequest) {
 
 	config := zap.NewProductionConfig()
 	config.OutputPaths = []string{"stdout"}
@@ -24,7 +26,6 @@ func httpTriggerEvent(w http.ResponseWriter, r HTTPWebRequest) {
 	logger, err := config.Build()
 	if err != nil {
 		log.Fatalf("Failed to setup logger :: %+v", err)
-		return
 	}
 
 	logger.Debug(fmt.Sprintf("GCP Events :: %+v", r))
@@ -33,11 +34,9 @@ func httpTriggerEvent(w http.ResponseWriter, r HTTPWebRequest) {
 	event, err := r.ConvertHTTPToTriggerEvent()
 	if err != nil {
 		logger.Error("Failed to convert trigger event", zap.Error(err))
-		return
 	}
 
 	service := shared.NewService(logger) // TODO - Move shared drive
 	service.Run(event)
 
-	return
 }
