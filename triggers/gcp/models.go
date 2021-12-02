@@ -42,7 +42,7 @@ func (r *HTTPWebRequest) ConvertHTTPToTriggerEvent() (models.TriggerEvent, error
 		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into a byte array :: %s", err.Error())
 	}
 
-	err_json := json.Unmarshal([]byte(s), &body)
+	err_json := json.Unmarshal(s, &body)
 
 	if err_json != nil {
 		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into a webhook event :: %s", err.Error())
