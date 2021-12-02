@@ -1,9 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"switchboard-module-boilerplate/models"
 )
@@ -40,8 +40,12 @@ func (b *GCPPubSubRecord) ConvertPSToTriggerEvent() (models.TriggerEvent, error)
 
 func (r *http.Request) ConvertHTTPToTriggerEvent() (models.TriggerEvent, error) {
 	var body GCPWebhookEvent
-	body, err := io.ReadAll(r.Body)
-	//err := json.Unmarshal(io.ReadAll(r.Body), &body)
+
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(r.Body)
+	s := buf.String()
+
+	err := json.Unmarshal([]byte(s), &body)
 
 	if err != nil {
 		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into a webhook event :: %s", err.Error())

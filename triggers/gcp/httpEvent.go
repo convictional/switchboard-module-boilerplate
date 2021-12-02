@@ -1,4 +1,4 @@
-
+package main
 
 import (
 	"fmt"
@@ -29,7 +29,7 @@ func httpTriggerEvent(w http.ResponseWriter, r *http.Request) {
 	logger.Debug(fmt.Sprintf("AWS Events :: %+v", r))
 
 	// Convert event to be platform-agnostic
-	event, err := gcpPubSub.ConvertToTriggerEvent()
+	event, err := r.ConvertHTTPToTriggerEvent()
 	if err != nil {
 		logger.Error("Failed to convert trigger event", zap.Error(err))
 		return
