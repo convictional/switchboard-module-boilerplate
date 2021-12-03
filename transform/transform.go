@@ -9,41 +9,71 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/gocarina/gocsv"
 	"github.com/kr/pretty"
 	"go.uber.org/zap"
 	"strings"
+	"time"
 )
+
+type Catalogue struct {
+	VendorID   string `json:"HR_VENDOR_ID" csv:"HR_VENDOR_ID"`
+	Department string `json:"HR_DEPARTMENT" csv:"HR_DEPARTMENT"`
+	Class      string `json:"HR_CLASS" csv:"HR_CLASS"`
+	Subclass   string `json:"HR_SUB_CLASS" csv:"HR_SUB_CLASS"`
+	Size       string `json:"HR_SIZE" csv:"HR_SIZE"`
+	SizeRange  string `json:"HR_SIZE_RANGE" csv:"HR_SIZE_RANGE"`
+	SeasonID   string `json:"HR_SEASON_ID" csv:"HR_SEASON_ID"`
+	Color      string `json:"HR_COLOR" csv:"HR_COLOR"`
+	Dimension  string `json:"HR_DIMENSION" csv:"HR_DIMENSION"`
+	ProductID  string `csv:"VendorStyleNumber"`
+	VariantID  string `csv:"CONVICTIONAL_VARIANT_ID"`
+}
 
 // Transform returns processed flagged, the updated model, and error.
 // Products that have already been processed will be returned as false.
 func Transform(event models.TriggerEvent) error {
 	logger := logging.GetLogger()
-	if event.Batch {
-		logger.Info("Running based on batch event")
-		_, _ = ProcessBatchEvent(logger, event)
-	}
-	logger.Info("Running based on single event")
-	var product models.Product
-	err := json.Unmarshal(event.Payload, &product)
+
+	var entries []*Catalogue
+
+	err := gocsv.UnmarshalBytes(event.Payload, &entries)
 	if err != nil {
 		return err
 	}
-	updated, productUpdatePayload, err := ProcessSingleProduct(logger, product, event)
-	if err != nil {
-		return err
-	}
-
-	if !updated {
-		return nil
-	}
-
 	if env.DoLoad() {
-		// Marshal into payload
-		err = load.LoadSingleProductToConvictionalAPI(product, productUpdatePayload, event)
+		var variantUpdates []models.Variant
+		productID := entries[0].ProductID
+		for _, entry := range entries {
+			attributeBytes, err := json.Marshal(entry)
+			if err != nil {
+				logger.Error(fmt.Sprintf("error marshaling product update :: %+v", err))
+				continue
+			}
+			var attributesInterface map[string]interface{}
+			err = json.Unmarshal(attributeBytes, &attributesInterface)
+			if err != nil {
+				logger.Error(fmt.Sprintf("error unmarshaling bytes to inteface :: %+v", err))
+				continue
+			}
+			variantUpdate := models.Variant{
+				ID:         entry.VariantID,
+				Attributes: &attributesInterface,
+			}
+			variantUpdates = append(variantUpdates, variantUpdate)
+		}
+
+		err = load.LoadSingleProductToConvictionalAPI(models.Product{ID: productID}, models.UpdateProduct{
+			Variants: &variantUpdates,
+			Attributes: &map[string]interface{}{
+				"processedOn": time.Now().String(),
+			},
+		}, event)
 		if err != nil {
 			logger.Error("failed to load product", zap.Error(err))
 			return err
 		}
+
 	} else {
 		logger.Info("Load has not been set")
 	}
