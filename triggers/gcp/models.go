@@ -21,17 +21,10 @@ type HTTPWebRequest struct {
 }
 
 func (b *GCPPubSubRecord) ConvertPSToTriggerEvent() (models.TriggerEvent, error) {
-	var product models.Product
-
-	err := json.Unmarshal(b.Data, &product)
-	if err != nil {
-		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into product :: %s", err.Error())
-	}
-
 	return models.TriggerEvent{
 		ID:      b.MessageID,
 		Batch:   false,
-		Product: &product,
+		Payload: b.Data,
 	}, nil
 }
 
@@ -44,15 +37,15 @@ func ConvertHTTPToTriggerEvent(r *http.Request) (models.TriggerEvent, error) {
 		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into a byte array :: %s", err.Error())
 	}
 
-	err_json := json.Unmarshal(s, &body)
+	errJson := json.Unmarshal(s, &body)
 
-	if err_json != nil {
+	if errJson != nil {
 		return models.TriggerEvent{}, fmt.Errorf("failed to parse body into a webhook event :: %s", err.Error())
 	}
 
 	return models.TriggerEvent{
 		ID:      body.Id,
 		Batch:   false,
-		Product: &body.Data,
+		Payload: body.Data,
 	}, nil
 }

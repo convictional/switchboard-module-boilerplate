@@ -1,6 +1,7 @@
 package gcp_trigger
 
 import (
+	"convictional.com/switchboard/models"
 	"fmt"
 	"log"
 	"net/http"
@@ -13,8 +14,8 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// httpTriggerEvent is an HTTP Cloud Function with a request parameter.
-func HttpTriggerEvent(w http.ResponseWriter, r *http.Request) {
+// CVWebhookTrigger is an HTTP Cloud Function with a request parameter.
+func CVWebhookTrigger(w http.ResponseWriter, r *http.Request) {
 
 	config := zap.NewProductionConfig()
 	config.OutputPaths = []string{"stdout"}
@@ -40,4 +41,34 @@ func HttpTriggerEvent(w http.ResponseWriter, r *http.Request) {
 
 	service := triggers.NewService(logger) // TODO - Move shared drive
 	service.Run(event)
+}
+
+// GenericHTTPTrigger is an HTTP Cloud Function with a request parameter.
+func GenericHTTPTrigger(w http.ResponseWriter, r *http.Request) {
+
+	config := zap.NewProductionConfig()
+	config.OutputPaths = []string{"stdout"}
+	if env.Debug() {
+		config.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+	} else {
+		config.Level = zap.NewAtomicLevelAt(zapcore.InfoLevel)
+	}
+	logger, err := config.Build()
+	if err != nil {
+		log.Fatalf("Failed to setup logger :: %+v", err)
+		return
+	}
+
+	logger.Debug(fmt.Sprintf("GCP Events :: %+v", r))
+
+	service := triggers.NewService(logger) // TODO - Move shared drive
+	var bodyBytes []byte
+	_, err = r.Body.Read(bodyBytes)
+	if err != nil {
+		log.Fatalf("Failed to read request body :: %+v", err)
+		return
+	}
+	service.Run(models.TriggerEvent{
+		Payload: bodyBytes,
+	})
 }
