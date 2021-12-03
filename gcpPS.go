@@ -6,8 +6,8 @@ import (
 	"log"
 
 	"convictional.com/switchboard/env"
+	"convictional.com/switchboard/triggers"
 	"convictional.com/switchboard/triggers/gcp"
-	"convictional.com/switchboard/triggers/shared"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -37,7 +37,7 @@ func TriggerPubSub(ctx context.Context, gcpPubSub gcp.GCPPubSubRecord) error {
 		return err
 	}
 
-	service := shared.NewService(logger)
+	service := triggers.NewService(logger)
 	service.Run(event)
 
 	return err
