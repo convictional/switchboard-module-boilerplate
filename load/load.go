@@ -1,26 +1,20 @@
 package load
 
 import (
-	"convictional.com/switchboard/env"
 	"convictional.com/switchboard/models"
-	"errors"
+	"encoding/json"
 	"fmt"
 )
 
-const (
-	LoadMethodConvictionalAPI = "convictional_api"
-)
-
-func Single(product models.Product, updatedProduct models.Product, event models.TriggerEvent) error {
+func LoadSingleProductToConvictionalAPI(product models.Product, update models.UpdateProduct, event models.TriggerEvent) error {
 	fmt.Printf("product :: %+v\n", product)
-	switch env.LoadMethod() {
-	case LoadMethodConvictionalAPI:
-		return UpdateProduct(product, updatedProduct, event)
-	default:
-		return errors.New("invalid load method")
+	bytes, err := json.Marshal(update)
+	if err != nil {
+		return err
 	}
-	return nil
+	return UpdateProduct(bytes, product.ID, event)
 }
-func Multiple( products []models.Product, event models.TriggerEvent) error {
+
+func Multiple(products []models.Product, event models.TriggerEvent) error {
 	return nil
 }

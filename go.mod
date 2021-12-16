@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/gocarina/gocsv v0.0.0-20211020200912-82fc2684cc48 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
